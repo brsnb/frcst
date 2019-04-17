@@ -10,9 +10,9 @@ class Location
 {
     public:
     Location() = delete;
-    Location(const std::string &city, 
-             const std::string &state, 
-             const std::string &country);
+    Location(const std::string &city_name, 
+             const std::string &state_name, 
+             const std::string &country_name);
     Location(const float latitude, const float longitude);
     ~Location();
 
@@ -20,7 +20,7 @@ class Location
     std::string     city;
     std::string     state;
     std::string     country;
-    float           latitude, longitude;
+    std::string     latitude, longitude;
 };
 
 } // namespace frcst

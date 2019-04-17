@@ -1,5 +1,6 @@
 #include <curl/curl.h>
 #include <iostream>
+#include <curl/curl.h>
 
 int main(int argc, char **argv)
 {
@@ -8,6 +9,6 @@ int main(int argc, char **argv)
     std::cout << "Hello world!\n";
 
     // clean up here for now?
-    
+    curl_global_cleanup();
     return 0;
 }
