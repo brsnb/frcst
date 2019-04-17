@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <sstream>
 #include <string>
+#include <iostream>
+#include <iomanip>
 
 #include <nlohmann/json.hpp>
 #include "request.hpp"
@@ -13,68 +15,63 @@ namespace frcst
 Location::Location(const std::string &city_name, 
                    const std::string &state_name,
                    const std::string &country_name)
+                   : city{city_name}, state{state_name}, country{country_name}
 {
-    std::string url = "https://nominatim.openstreetmap.org/search";
-
-    // make post fields string
+    // make url
     std::ostringstream oss;
-    oss << "q=";
+    oss << "https://nominatim.openstreetmap.org/search?q=";
     if(!city.empty())
     {
         std::string city_url = city_name;
-        std::replace(city_url.begin(), city_url.end(), ' ', '%');
+        std::replace(city_url.begin(), city_url.end(), ' ', '+');
         oss << city_url << ",+";
     }
-    else if(!state.empty())
+    if(!state.empty())
     {
         std::string state_url = state_name;
-        std::replace(state_url.begin(), state_url.end(), ' ', '%');
+        std::replace(state_url.begin(), state_url.end(), ' ', '+');
         oss << state_url << ",+";
     }
-    else if(!country.empty())
+    if(!country.empty())
     {
         std::string country_url = country_name;
-        std::replace(country_url.begin(), country_url.end(), ' ', '%');
+        std::replace(country_url.begin(), country_url.end(), ' ', '+');
         oss << country_url << ",+";
     }
-
-    std::string post_fields = oss.str();
+    oss << "&format=jsonv2";
+    std::string url = oss.str();
 
     // send request / receive response
-    std::string response = request::http_post(url, post_fields);
+    std::string response = request::http_get(url);
 
     // parse JSON
     using json = nlohmann::json;
     json res_json = json::parse(response);
 
-    latitude =  res_json["lat"].get<std::string>();
-    longitude = res_json["lon"].get<std::string>();
-
     // finish initialization
-    city = city_name;
-    state = state_name;
-    country = country_name;
+    latitude =  res_json[0]["lat"].get<std::string>();
+    longitude = res_json[0]["lon"].get<std::string>();
 }
 
 Location::Location(const float latitude, const float longitude)
 {
-    std::string url = "https://nominatim.openstreetmap.org/reverse";
-
-    // make post fields string
+    // make url
     std::ostringstream oss;
-    oss << "format=jsonv2?" << "lat=" << latitude << "?" << "long=" << longitude;
-    std::string post_fields = oss.str();
+    oss << "https://nominatim.openstreetmap.org/reverse"
+        << "?format=json&" << "lat=" << latitude << "&" << "lon=" << longitude;
+    std::string url = oss.str();
 
     // send request / receive response
-    std::string response = request::http_post(url, post_fields);
+    std::string response = request::http_get(url);
 
     // parse JSON
     using json = nlohmann::json;
     json res_json = json::parse(response);
 
-    city =    res_json["city"].get<std::string>();
-    state =   res_json["state"].get<std::string>();
-    country = res_json["country"].get<std::string>();
+    city =    res_json["address"]["city"].get<std::string>();
+    state =   res_json["address"]["state"].get<std::string>();
+    country = res_json["address"]["country"].get<std::string>();
+
 }
 
 } // namespace frcst
