@@ -19,7 +19,7 @@ std::string http_post(const std::string &url, const std::string &post_fields)
     CURL *curl = curl_easy_init();
 
     // debug
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
     // url
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
@@ -53,7 +53,7 @@ std::string http_get(const std::string &url)
     CURL *curl = curl_easy_init();
 
     // debug
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
     // url
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());

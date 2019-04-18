@@ -2,7 +2,6 @@
 #define LOCATION_HPP_
 
 #include <string>
-#include <utility>
 
 namespace frcst
 {
@@ -11,13 +10,16 @@ class Location
 {
     public:
     Location() = delete;
-    Location(const std::string &city_name, 
-             const std::string &state_name, 
-             const std::string &country_name);
+    Location(std::string city_name, 
+             std::string state_name, 
+             std::string country_name);
     Location(const float latitude, const float longitude);
 
-    std::string get_city() const {return city;}
-    std::pair<std::string, std::string> get_coords() const {return std::pair<std::string, std::string>{latitude, longitude};}
+    std::string     get_city() const {return city;}
+    std::string     get_country() const {return country;}
+    std::string     get_state() const {return state;}
+    std::string     get_latitude() const {return latitude;}
+    std::string     get_longitude() const {return longitude;}
 
     private:
     std::string     city;

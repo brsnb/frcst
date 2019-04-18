@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <sstream>
 #include <string>
-#include <iostream>
-#include <iomanip>
 
 #include <nlohmann/json.hpp>
 #include "request.hpp"
@@ -12,32 +10,33 @@
 namespace frcst
 {
 
-Location::Location(const std::string &city_name, 
-                   const std::string &state_name,
-                   const std::string &country_name)
-                   : city{city_name}, state{state_name}, country{country_name}
+Location::Location(std::string city_name, 
+                   std::string state_name,
+                   std::string country_name)
 {
-    // make url
+    // build url
     std::ostringstream oss;
     oss << "https://nominatim.openstreetmap.org/search?q=";
-    if(!city.empty())
+
+    if(!city_name.empty())
     {
-        std::string city_url = city_name;
-        std::replace(city_url.begin(), city_url.end(), ' ', '+');
-        oss << city_url << ",+";
+        city = city_name;
+        std::replace(city_name.begin(), city_name.end(), ' ', '+');
+        oss << city_name << ",+";
     }
-    if(!state.empty())
+    if(!state_name.empty())
     {
-        std::string state_url = state_name;
-        std::replace(state_url.begin(), state_url.end(), ' ', '+');
-        oss << state_url << ",+";
+        state = state_name;
+        std::replace(state_name.begin(), state_name.end(), ' ', '+');
+        oss << state_name << ",+";
     }
-    if(!country.empty())
+    if(!country_name.empty())
     {
-        std::string country_url = country_name;
-        std::replace(country_url.begin(), country_url.end(), ' ', '+');
-        oss << country_url << ",+";
+        country = country_name;
+        std::replace(country_name.begin(), country_name.end(), ' ', '+');
+        oss << country_name << ",+";
     }
+
     oss << "&format=jsonv2";
     std::string url = oss.str();
 
@@ -51,11 +50,12 @@ Location::Location(const std::string &city_name,
     // finish initialization
     latitude =  res_json[0]["lat"].get<std::string>();
     longitude = res_json[0]["lon"].get<std::string>();
+
 }
 
 Location::Location(const float latitude, const float longitude)
 {
-    // make url
+    // build url
     std::ostringstream oss;
     oss << "https://nominatim.openstreetmap.org/reverse"
         << "?format=json&" << "lat=" << latitude << "&" << "lon=" << longitude;
