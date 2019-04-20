@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 project(frcst)
 
-add_compile_options(-W -Wall -Wpedantic)
+add_compile_options(-W -Wall)
 
 find_package(nlohmann_json 3.6.1 REQUIRED)
 find_package(CURL 7.64 REQUIRED)

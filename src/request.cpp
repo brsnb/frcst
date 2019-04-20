@@ -1,20 +1,17 @@
 #include "request.hpp"
 
-#include <cstdlib>
 #include <iostream>
-#include <curl/curl.h>
 
 namespace frcst
 {
-namespace request
-{
-size_t write_callback(char *content, size_t size, size_t nmemb, void *user_data)
+
+size_t Request::write_callback(char *content, size_t size, size_t nmemb, void *user_data)
 {
     ((std::string*)user_data)->append((char*)content, size * nmemb);
     return size * nmemb;
 }
 
-std::string http_post(const std::string &url, const std::string &post_fields)
+std::string Request::http_post(const std::string &url, const std::string &post_fields)
 {
     CURL *curl = curl_easy_init();
 
@@ -42,15 +39,15 @@ std::string http_post(const std::string &url, const std::string &post_fields)
     if(res != CURLE_OK)
     {
         std::cout << "Something happened in http_post\n";
-        exit(EXIT_FAILURE);
+        throw Request_exception();
     }
 
     return callback;
 }
 
-std::string http_get(const std::string &url)
+std::string Request::http_get(const std::string &url)
 {
-    CURL *curl = curl_easy_init();
+    curl = curl_easy_init();
 
     // debug
     //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
@@ -78,11 +75,10 @@ std::string http_get(const std::string &url)
     if(res != CURLE_OK)
     {
         std::cout << "Something happened in http_post\n";
-        exit(EXIT_FAILURE);
+        throw Request_exception();
     }
 
     return callback;
 }
 
-} // namespace request
 } // namespace frcst

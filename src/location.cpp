@@ -4,6 +4,8 @@
 #include <sstream>
 #include <string>
 
+#include <iostream>
+
 #include <nlohmann/json.hpp>
 #include "request.hpp"
 
@@ -39,6 +41,8 @@ Location::Location(std::string city_name,
 
     oss << "&format=jsonv2";
     std::string url = oss.str();
+
+    std::cout << "URL: " << url << std::endl;
 
     // send request / receive response
     std::string response = request::http_get(url);
