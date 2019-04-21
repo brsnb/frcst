@@ -19,6 +19,8 @@ add_executable(frcst
     src/main.cpp
     )
 
+target_compile_features(frcst PUBLIC cxx_std_17)
+
 target_link_libraries(frcst PRIVATE nlohmann_json::nlohmann_json
                             PRIVATE curl
                             PRIVATE Boost::program_options

@@ -21,7 +21,8 @@ Forecast::Forecast(const Location &loc)
     std::string url = oss.str();
 
     // send request / receive response
-    std::string response = request::http_get(url);
+    Request request{};
+    std::string response = request.http_get(url);
 
     // parse json
     using json = nlohmann::json;
@@ -31,7 +32,8 @@ Forecast::Forecast(const Location &loc)
     url = res_json["properties"]["forecast"].get<std::string>();
 
     // send request / receive response
-    response = request::http_get(url);
+    request.clear();
+    response = request.http_get(url);
 
     // parse json
     res_json.clear();

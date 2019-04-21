@@ -45,7 +45,8 @@ Location::Location(std::string city_name,
     std::cout << "URL: " << url << std::endl;
 
     // send request / receive response
-    std::string response = request::http_get(url);
+    Request request{};
+    std::string response = request.http_get(url);
 
     // parse JSON
     using json = nlohmann::json;
@@ -66,7 +67,8 @@ Location::Location(const float latitude, const float longitude)
     std::string url = oss.str();
 
     // send request / receive response
-    std::string response = request::http_get(url);
+    Request request{};
+    std::string response = request.http_get(url);
 
     // parse JSON
     using json = nlohmann::json;
