@@ -6,8 +6,8 @@ namespace frcst
 {
 
 Request::Request()
+    : curl{std::unique_ptr<CURL, CURL_cleanup>(curl_easy_init())}
 {
-    curl = std::unique_ptr<CURL, CURL_cleanup>(curl_easy_init());
 }
 
 void Request::clear()

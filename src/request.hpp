@@ -34,14 +34,14 @@ class Request
     */
     void          clear();
 
+
+    private:
     /*
     *   Callback function for CURLOPT_WRITEFUNCTION, writes the response to 
     *   string pointed to by user_data
     */
     static size_t write_callback(char *content, size_t size, size_t nmemb, void *user_data);
 
-    private:
-    
     /*
     *   Custom deleter for the CURL unique_ptr
     */

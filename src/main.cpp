@@ -29,45 +29,49 @@ int main(int argc, char **argv)
     // parse command line options
     try
     {
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, desc), vm);
 
-    if(vm.count("-h"))
-    {
-        std::cout << desc << '\n';
-        return 0;
-    }
+        if(vm.count("-h"))
+        {
+            std::cout << desc << '\n';
+            return 0;
+        }
+        if(vm.empty())
+        {
+            std::cout << desc << '\n';
+            return 0;
+        }
 
-    po::notify(vm);
+        po::notify(vm);
 
-    if(vm.count("-c"))
-    {
-        city = vm["-c"].as<std::string>();
-    }
-    if(vm.count("-s"))
-    {
-        state = vm["-s"].as<std::string>();
-    }
-    if(vm.count("-n"))
-    {
-        country = vm["-n"].as<std::string>();
-    }
-    if(vm.count("-l"))
-    {
-        std::string s = vm["-l"].as<std::string>();
-        coordinates = frcst::util::split(s, ':');
-    }
-
+        if(vm.count("-c"))
+        {
+            city = vm["-c"].as<std::string>();
+        }
+        if(vm.count("-s"))
+        {
+            state = vm["-s"].as<std::string>();
+        }
+        if(vm.count("-n"))
+        {
+            country = vm["-n"].as<std::string>();
+        }
+        if(vm.count("-l"))
+        {
+            std::string s = vm["-l"].as<std::string>();
+            coordinates = frcst::util::split(s, ':');
+        }
     }
     catch(const po::error &e)
     {
-      std::cerr << "ERROR: " << e.what() << std::endl << std::endl; 
-      std::cerr << desc << std::endl; 
+        std::cerr << "ERROR: " << e.what() << std::endl << std::endl; 
+        std::cerr << desc << std::endl; 
     }
     catch(const std::exception &e)
     {
-      std::cerr << "Unhandled exception: " << e.what() << std::endl << std::endl; 
-      std::cerr << desc << std::endl; 
+        std::cerr << "Unhandled exception: " << e.what() << std::endl << std::endl; 
+        std::cerr << desc << std::endl; 
     }
 
     // init curl
