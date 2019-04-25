@@ -25,9 +25,6 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
-void parse_args(std::string &city, std::string &state, 
-                std::string &country, std::vector<std::string> &coordinates);
-
 } // util
 } // frcst
 

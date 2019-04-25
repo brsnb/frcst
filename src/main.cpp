@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <boost/program_options.hpp>
+#include <nlohmann/json.hpp>
 
 #include "location.hpp"
 #include "frcst_util.hpp"
@@ -65,25 +66,40 @@ int main(int argc, char **argv)
     }
     catch(const po::error &e)
     {
-        std::cerr << "ERROR: " << e.what() << std::endl << std::endl; 
-        std::cerr << desc << std::endl; 
+        std::cerr << "ERROR: " << e.what() << "\n\n";
+        std::cerr << desc << "\n";
+        return 1;
     }
     catch(const std::exception &e)
     {
-        std::cerr << "Unhandled exception: " << e.what() << std::endl << std::endl; 
-        std::cerr << desc << std::endl; 
+        std::cerr << "Unhandled exception: " << e.what() << "\n\n";
+        std::cerr << desc << "\n";
+        return 1;
     }
 
     // init curl
     curl_global_init(CURL_GLOBAL_ALL);
-
-    frcst::Location loc{city, state, country};
-    frcst::Forecast f{loc};
-    std::cout << "Location: " << loc.get_city() << ", " << loc.get_state() << ", " << loc.get_country() << std::endl;
-    std::cout << "Coordinates: " << loc.get_latitude() << ", " << loc.get_longitude() << std::endl;
-    std::cout << "Temp: " << f.get_temp_f() << 'F' << " | " << f.get_temp_c() << 'C' << std::endl;
-    std::cout << "Details: " << f.get_detailed() << std::endl;
-
+    try
+    {
+        frcst::Location loc{city, state, country};
+        frcst::Forecast f{loc};
+        std::cout << "Location: " << loc.get_city() << ", " << loc.get_state() << ", " << loc.get_country() << std::endl;
+        std::cout << "Coordinates: " << loc.get_latitude() << ", " << loc.get_longitude() << std::endl;
+        std::cout << "Temp: " << f.get_temp_f() << 'F' << " | " << f.get_temp_c() << 'C' << std::endl;
+        std::cout << "Details: " << f.get_detailed() << std::endl;
+    }
+    catch(const nlohmann::json::exception &e)
+    {
+        std::cerr << "Error: Enter a correct location" << "\n\n";
+        curl_global_cleanup();
+        return 1;
+    }
+    catch(const std::exception &e)
+    {
+        std::cerr << "Unhandled exception: " << e.what() << "\n\n";
+        curl_global_cleanup();
+        return 1;
+    }
     // clean up curl
     curl_global_cleanup();
 

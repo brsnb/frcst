@@ -13,6 +13,11 @@ class Request
     public:
     Request();
 
+    Request(const Request&) = delete;
+    Request& operator=(const Request*) = delete;
+    Request(Request&&) = delete;
+    Request& operator=(Request&&) = delete;
+
     class Request_exception : public std::runtime_error
     {
         public:

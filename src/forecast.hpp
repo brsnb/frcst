@@ -11,7 +11,7 @@ class Forecast
 {
     public:
     Forecast() = delete;
-    Forecast(const Location &loc);
+    explicit Forecast(const Location &loc);
 
     Location        get_location() const {return location;}
     float           get_temp_c() const {return temperature_c;}
